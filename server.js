@@ -23,12 +23,13 @@ router.post('/message', function(req, res) {
 router.delete('/message', function(req, res) {
     console.log(req.query);
     if (req.query.error == 'ok') {
-        response.error(req, res, "Erros Simulado", 400);
+        response.error(req, res, "Erros inesperado", 400, 'Simulación de errores');
     } else {
         response.success(req, res, "Eliminado correctamente");
     }
 });
 
+// Servir archivos estáticos
 app.use('/app', express.static('public'));
 
 app.listen(3000);
