@@ -26,6 +26,17 @@ router.post('/', function(req, res) {
         });
 });
 
+// Verbo http para modificaciones parciales
+router.patch('/:id', function(req, res) {
+    controller.updateMessage(req.params.id, req.body.message)
+        .then((data) => {
+            response.success(req, res, data, 200);
+        })
+        .catch(error => {
+            response.error(req, res, 'Error interno', 500, error);
+        })
+});
+
 router.delete('/', function(req, res) {
     console.log(req.query);
     if (req.query.error == 'ok') {

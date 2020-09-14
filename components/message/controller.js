@@ -16,9 +16,21 @@ function addMessage(user, message) {
     });
 }
 
+async function updateMessage(id, message) {
+    return new Promise(async(resolve, reject) => {
+        if (!id || !message) {
+            reject('Invalid data');
+            // return false;
+        }
+
+        const result = await store.edit(id, message);
+        resolve(result);
+    });
+}
+
 function getMessages() {
     return new Promise((resolve, reject) => {
         resolve(store.list());
     });
 }
-module.exports = { addMessage, getMessages }
+module.exports = { addMessage, getMessages, updateMessage }
