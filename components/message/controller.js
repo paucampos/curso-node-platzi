@@ -20,7 +20,6 @@ async function updateMessage(id, message) {
     return new Promise(async(resolve, reject) => {
         if (!id || !message) {
             reject('Invalid data');
-            // return false;
         }
 
         const result = await store.edit(id, message);
@@ -28,9 +27,9 @@ async function updateMessage(id, message) {
     });
 }
 
-function getMessages() {
+function getMessages(filterUser) {
     return new Promise((resolve, reject) => {
-        resolve(store.list());
+        resolve(store.list(filterUser));
     });
 }
 module.exports = { addMessage, getMessages, updateMessage }
