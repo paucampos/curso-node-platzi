@@ -1,15 +1,17 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 
-// const router = require('./components/message/network');
+const db = require('./db');
 const router = require('./nertwork/routes');
+const { DB_HOST, DB_PORT, DB_NAME } = require('./config');
+const connectionUrl = `mongodb+srv://${DB_HOST}:${DB_PORT}@cluster0-xvqsc.mongodb.net/${DB_NAME}?retryWrites=true&w=majority`;
 
 var app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-// app.use(router);
 router(app);
 
+db(connectionUrl);
 
 // Servir archivos estáticos
 app.use('/app', express.static('public'));
