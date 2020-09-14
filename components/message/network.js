@@ -1,17 +1,29 @@
 const express = require('express');
 const router = express.Router();
+const controller = require('./controller');
 const response = require('../../nertwork/response');
 
 router.get('/', function(req, res) {
-    response.success(req, res, "Se ha obtenido la lista correctamente", 201);
+    controller.getMessages()
+        .then((messageList) => {
+            response.success(req, res, messageList, 200);
+        })
+        .catch(error => {
+            response.error(req, res, 'Undexpected error', 500, error);
+        })
 });
 
 router.post('/', function(req, res) {
-    console.log(req.headers);
     res.header({
         "custom-header": "Nuestro valor personalizado"
-    })
-    response.success(req, res, "Creado correctamente");
+    });
+    controller.addMessage(req.body.user, req.body.message)
+        .then((fullMessage) => {
+            response.success(req, res, fullMessage);
+        })
+        .catch((error) => {
+            response.error(req, res, error, 400);
+        });
 });
 
 router.delete('/', function(req, res) {
