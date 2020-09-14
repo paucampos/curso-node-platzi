@@ -32,4 +32,20 @@ function getMessages(filterUser) {
         resolve(store.list(filterUser));
     });
 }
-module.exports = { addMessage, getMessages, updateMessage }
+
+function deleteMessage(id) {
+    return new Promise((resolve, reject) => {
+        if (!id) {
+            reject('Invalid data');
+        }
+        resolve(store.delete(id))
+            .then(() => {
+                resolve();
+            })
+            .catch(error => {
+                reject(error);
+            })
+    });
+}
+
+module.exports = { addMessage, getMessages, updateMessage, deleteMessage }

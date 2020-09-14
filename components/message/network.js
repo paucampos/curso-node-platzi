@@ -35,16 +35,19 @@ router.patch('/:id', function(req, res) {
         })
         .catch(error => {
             response.error(req, res, 'Error interno', 500, error);
-        })
+        });
 });
 
-router.delete('/', function(req, res) {
+router.delete('/:id', function(req, res) {
     console.log(req.query);
-    if (req.query.error == 'ok') {
-        response.error(req, res, "Error inesperado", 400, 'Simulación de errores');
-    } else {
-        response.success(req, res, "Eliminado correctamente");
-    }
+    controller.deleteMessage(req.params.id)
+        .then(() => {
+            response.success(req, res, `Mensaje ${req.params.id} eliminado`)
+        })
+        .catch(error => {
+            response.error(req, res, 'Error interno', 500, error)
+        })
+
 });
 
 module.exports = router;
