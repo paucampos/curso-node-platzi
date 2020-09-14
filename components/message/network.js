@@ -22,7 +22,7 @@ router.post('/', function(req, res) {
             response.success(req, res, fullMessage);
         })
         .catch((error) => {
-            response.error(req, res, error, 400);
+            response.error(req, res, error, 400, error);
         });
 });
 
