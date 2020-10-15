@@ -1,15 +1,23 @@
 const store = require('./store');
 
-function addMessage(user, message) {
+function addMessage(chat, user, message, file) {
     return new Promise((resolve, reject) => {
-        if (!user || !message) {
-            console.error('[messageController]: Falta user o message');
+        if (!chat || !user || !message) {
+            console.error('[messageController]: Falta chat usuario o message');
             return reject('Información inválida');
         }
+
+        let fileUrl = '';
+        if (file) {
+            fileUrl = 'http://localhost:3000/app/files/' + file.filename;
+        }
+
         const fullMessage = {
+            chat,
             user,
             message,
-            date: new Date()
+            date: new Date(),
+            file: fileUrl
         }
         store.add(fullMessage);
         return resolve(fullMessage)
@@ -27,9 +35,9 @@ async function updateMessage(id, message) {
     });
 }
 
-function getMessages(filterUser) {
+function getMessages(filterChat) {
     return new Promise((resolve, reject) => {
-        resolve(store.list(filterUser));
+        resolve(store.list(filterChat));
     });
 }
 

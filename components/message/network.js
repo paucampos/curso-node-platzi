@@ -1,10 +1,16 @@
 const express = require('express');
+const multer = require('multer');
+
 const router = express.Router();
 const controller = require('./controller');
 const response = require('../../nertwork/response');
 
+const upload = multer({
+    dest: 'public/files/',
+});
+
 router.get('/', function(req, res) {
-    const filterMessages = req.query.user || null;
+    const filterMessages = req.query.chat || null;
     controller.getMessages(filterMessages)
         .then((messageList) => {
             response.success(req, res, messageList, 200);
@@ -14,16 +20,14 @@ router.get('/', function(req, res) {
         })
 });
 
-router.post('/', function(req, res) {
-    res.header({
-        "custom-header": "Nuestro valor personalizado"
-    });
-    controller.addMessage(req.body.user, req.body.message)
+router.post('/', upload.single('file'), function(req, res) {
+    console.log('file', req.file);
+    controller.addMessage(req.body.chat, req.body.user, req.body.message, req.file)
         .then((fullMessage) => {
-            response.success(req, res, fullMessage);
+            response.success(req, res, fullMessage, 201);
         })
         .catch((error) => {
-            response.error(req, res, error, 400, error);
+            response.error(req, res, 'Información inválida', 400, error);
         });
 });
 
@@ -39,10 +43,9 @@ router.patch('/:id', function(req, res) {
 });
 
 router.delete('/:id', function(req, res) {
-    console.log(req.query);
     controller.deleteMessage(req.params.id)
         .then(() => {
-            response.success(req, res, `Mensaje ${req.params.id} eliminado`)
+            response.success(req, res, `Mensaje ${req.params.id} eliminado`, 200)
         })
         .catch(error => {
             response.error(req, res, 'Error interno', 500, error)
